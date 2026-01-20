@@ -5,6 +5,9 @@ import mountainHike from "@/assets/photos/mountain-hike.jpg";
 import mistyLake from "@/assets/photos/misty-lake.jpg";
 import lobsterPool from "@/assets/photos/lobster-pool.jpg";
 import holiFestival from "@/assets/photos/holi-festival.jpg";
+import img7953 from "@/assets/photos/img-7953.jpg";
+import img8425 from "@/assets/photos/img-8425.jpg";
+import img8473 from "@/assets/photos/img-8473.jpg";
 import { Photo } from "@/types/photo";
 
 export const samplePhotos: Photo[] = [
@@ -63,5 +66,29 @@ export const samplePhotos: Photo[] = [
     date: "May 2025",
     katherineComment: "Holi was an explosion of joy!",
     djComment: "That blue took three showers to wash off.",
+  },
+  {
+    id: "8",
+    src: img7953,
+    location: "Napa Valley, California",
+    date: "September 2024",
+    katherineComment: "Wine tasting perfection!",
+    djComment: "We may have bought too many bottles.",
+  },
+  {
+    id: "9",
+    src: img8425,
+    location: "Big Sur, California",
+    date: "November 2024",
+    katherineComment: "Road trip views were unreal.",
+    djComment: "Worth every winding turn on Highway 1.",
+  },
+  {
+    id: "10",
+    src: img8473,
+    location: "Joshua Tree, California",
+    date: "December 2024",
+    katherineComment: "Desert magic at sunset.",
+    djComment: "The stars that night were incredible.",
   },
 ];

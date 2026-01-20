@@ -17,13 +17,13 @@ export const PhotoSlide = ({ photo, isActive }: PhotoSlideProps) => {
       `}
     >
       {/* Background Image */}
-      <div className="absolute inset-0">
+      <div className="absolute inset-0 flex items-center justify-center bg-background">
         <img 
           src={photo.src} 
           alt={photo.location}
-          className="w-full h-full object-cover"
+          className="max-w-full max-h-full w-auto h-auto object-contain"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-background/95 via-background/30 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-background/95 via-transparent to-transparent" />
       </div>
 
       {/* Content Overlay */}
