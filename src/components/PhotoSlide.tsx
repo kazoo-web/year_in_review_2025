@@ -27,7 +27,7 @@ export const PhotoSlide = ({ photo, isActive }: PhotoSlideProps) => {
       </div>
 
       {/* Content Overlay */}
-      <div className="absolute inset-0 flex flex-col justify-end items-center p-6 md:p-12 lg:p-16">
+      <div className="absolute inset-0 flex flex-col justify-end items-center p-6 md:p-12 lg:p-16 pointer-events-none">
         <div className={`space-y-4 flex flex-col items-center ${isActive ? 'animate-slide-up' : ''}`}>
           {/* Location and Date Tags */}
           <div className="flex flex-wrap items-center justify-center gap-3">
