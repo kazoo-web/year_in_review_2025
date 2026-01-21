@@ -20,6 +20,15 @@ import eveningScene from "@/assets/photos/evening-scene-16x9.jpg";
 import julyMoment from "@/assets/photos/july-moment-16x9.jpg";
 import summerNight from "@/assets/photos/summer-night-16x9.jpg";
 import fourthJuly from "@/assets/photos/fourth-july-16x9.jpg";
+import vanMorningView from "@/assets/photos/van-morning-view.jpg";
+import redBarnSelfie from "@/assets/photos/red-barn-selfie.jpg";
+import cabotTrailOverlook from "@/assets/photos/cabot-trail-overlook.jpg";
+import dockBeerPortrait from "@/assets/photos/dock-beer-portrait.jpg";
+import foggyBeachVan from "@/assets/photos/foggy-beach-van.jpg";
+import waterfallCreek from "@/assets/photos/waterfall-creek.jpg";
+import carterNotchHutGroup from "@/assets/photos/carter-notch-hut-group.jpg";
+import katherineDad from "@/assets/photos/katherine-dad.jpg";
+import cavernsFamily from "@/assets/photos/caverns-family.jpg";
 
 export const samplePhotos: Photo[] = [
   {
@@ -190,10 +199,82 @@ export const samplePhotos: Photo[] = [
     katherineComment: "Add Katherine's comment",
     djComment: "Add DJ's comment",
   },
-  ...Array.from({ length: 24 }, (_, i) => ({
-    id: String(i + 22),
+  {
+    id: "22",
+    src: vanMorningView,
+    location: "Nova Scotia, Canada",
+    date: "July 2025",
+    katherineComment: "Waking up to this view from the van!",
+    djComment: "Best bedroom window ever.",
+  },
+  {
+    id: "23",
+    src: redBarnSelfie,
+    location: "Cape Breton, Nova Scotia",
+    date: "July 2025",
+    katherineComment: "Found this adorable red barn!",
+    djComment: "The golden hour was perfect.",
+  },
+  {
+    id: "24",
+    src: cabotTrailOverlook,
+    location: "Cabot Trail, Nova Scotia",
+    date: "July 2025",
+    katherineComment: "The views on the Cabot Trail are unreal!",
+    djComment: "Mountains meet the sea. Doesn't get better than this.",
+  },
+  {
+    id: "25",
+    src: dockBeerPortrait,
+    location: "Nova Scotia, Canada",
+    date: "July 2025",
+    katherineComment: "Cheers to vacation vibes!",
+    djComment: "She looks so cozy in that beanie.",
+  },
+  {
+    id: "26",
+    src: foggyBeachVan,
+    location: "Nova Scotia Coast",
+    date: "July 2025",
+    katherineComment: "Foggy morning adventures!",
+    djComment: "The fog made everything feel so peaceful.",
+  },
+  {
+    id: "27",
+    src: waterfallCreek,
+    location: "New Hampshire",
+    date: "July 2025",
+    katherineComment: "Cooling off in the creek!",
+    djComment: "She found the best swimming hole.",
+  },
+  {
+    id: "28",
+    src: carterNotchHutGroup,
+    location: "Carter Notch Hut, New Hampshire",
+    date: "August 2025",
+    katherineComment: "The crew made it to the hut!",
+    djComment: "Heavy packs but worth every step.",
+  },
+  {
+    id: "29",
+    src: katherineDad,
+    location: "Virginia",
+    date: "August 2025",
+    katherineComment: "Love my Dad!",
+    djComment: "Great to visit family.",
+  },
+  {
+    id: "30",
+    src: cavernsFamily,
+    location: "Luray Caverns, Virginia",
+    date: "August 2025",
+    katherineComment: "Underground adventures with family!",
+    djComment: "Those stalactites were incredible.",
+  },
+  ...Array.from({ length: 15 }, (_, i) => ({
+    id: String(i + 31),
     src: "",
-    location: `Photo ${i + 22} - Add Location`,
+    location: `Photo ${i + 31} - Add Location`,
     date: "Add Date",
     katherineComment: "Add Katherine's comment",
     djComment: "Add DJ's comment",
