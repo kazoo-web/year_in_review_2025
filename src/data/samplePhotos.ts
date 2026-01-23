@@ -75,7 +75,7 @@ export const samplePhotos: Photo[] = [
   {
     id: "8",
     src: mosquitos,
-    location: "Culebra, Puerto Rico",
+    location: "Vieques, Puerto Rico",
     date: "February 2025",
     katherineComment: "The sign was ironic - we got eaten alive!",
     djComment: "Golf cart island life was pretty great though.",
