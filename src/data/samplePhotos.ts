@@ -280,7 +280,7 @@ export const samplePhotos: Photo[] = [
   {
     id: "30",
     src: cavernsFamily,
-    location: "Luray Caverns, Virginia",
+    location: "Luray Caverns, Luray, VA",
     date: "August 2025",
     katherineComment: "Underground adventures with family!",
     djComment: "Those stalactites were incredible.",
@@ -288,7 +288,7 @@ export const samplePhotos: Photo[] = [
   {
     id: "31",
     src: mtbGroupSelfie,
-    location: "Snowshoe Mountain, West Virginia",
+    location: "Bryce Resort, Basye, VA",
     date: "August 2025",
     katherineComment: "The whole crew ready to shred!",
     djComment: "First time mountain biking for some of us.",
@@ -296,7 +296,7 @@ export const samplePhotos: Photo[] = [
   {
     id: "32",
     src: katherineMtbBreak,
-    location: "Snowshoe Mountain, West Virginia",
+    location: "Bryce Resort, Basye, VA",
     date: "August 2025",
     katherineComment: "Taking a breather between runs!",
     djComment: "She crushed it on the trails.",
@@ -304,7 +304,7 @@ export const samplePhotos: Photo[] = [
   {
     id: "33",
     src: grandmaLaughs,
-    location: "West Virginia",
+    location: "Bryce Resort, Basye, VA",
     date: "August 2025",
     katherineComment: "Three generations of giggles!",
     djComment: "Grandma always knows how to make us laugh.",
@@ -312,7 +312,7 @@ export const samplePhotos: Photo[] = [
   {
     id: "34",
     src: bostonHarborDinner,
-    location: "Boston Harbor, Massachusetts",
+    location: "Boston, MA",
     date: "August 2025",
     katherineComment: "Lobster with the best view!",
     djComment: "Nothing beats waterfront seafood.",
@@ -329,7 +329,7 @@ export const samplePhotos: Photo[] = [
   {
     id: "36",
     src: notreDameGame,
-    location: "Notre Dame Stadium, Indiana",
+    location: "South Bend, IN",
     date: "September 2025",
     katherineComment: "Go Irish!",
     djComment: "The energy in that stadium was unreal.",
@@ -337,7 +337,7 @@ export const samplePhotos: Photo[] = [
   {
     id: "37",
     src: fallHikeSunbeam,
-    location: "New England",
+    location: "Acadia National Park, Bar Harbor, ME",
     date: "September 2025",
     katherineComment: "Caught in a sunbeam on the trail!",
     djComment: "The fall colors were just starting to pop.",
@@ -345,7 +345,7 @@ export const samplePhotos: Photo[] = [
   {
     id: "38",
     src: hammockCampsite,
-    location: "Acadia, Maine",
+    location: "Acadia National Park, Bar Harbor, ME",
     date: "September 2025",
     katherineComment: "Hammock setup complete!",
     djComment: "Best campsite views in Acadia.",
@@ -353,7 +353,7 @@ export const samplePhotos: Photo[] = [
   {
     id: "39",
     src: oceanCliffClimbing,
-    location: "Acadia National Park, Maine",
+    location: "Acadia National Park, Bar Harbor, ME",
     date: "September 2025",
     katherineComment: "Climbing above the ocean!",
     djComment: "Otter Cliffs never disappoints.",
@@ -386,7 +386,7 @@ export const samplePhotos: Photo[] = [
   {
     id: "43",
     src: dinnerDateCozy,
-    location: "Boston, Massachusetts",
+    location: "Catskills, NY",
     date: "November 2025",
     katherineComment: "Cozy dinner date vibes!",
     djComment: "That place was so romantic.",
@@ -394,7 +394,7 @@ export const samplePhotos: Photo[] = [
   {
     id: "44",
     src: bookstoreKazoo,
-    location: "Brookline, Massachusetts",
+    location: "Rhinebeck, NY",
     date: "November 2025",
     katherineComment: "Found my inner child!",
     djComment: "She had to show off the Kazoo magazine.",
