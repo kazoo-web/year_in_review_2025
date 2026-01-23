@@ -231,7 +231,7 @@ export const samplePhotos: Photo[] = [
   {
     id: "24",
     src: cabotTrailOverlook,
-    location: "Cabot Trail, Nova Scotia",
+    location: "Cape Breton, Nova Scotia, Canada",
     date: "July 2025",
     katherineComment: "The views on the Cabot Trail are unreal!",
     djComment: "Mountains meet the sea. Doesn't get better than this.",
