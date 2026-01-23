@@ -74,7 +74,7 @@ export const samplePhotos: Photo[] = [
   {
     id: "7",
     src: mistyLake,
-    location: "Lake Winnipesaukee, New Hampshire",
+    location: "Lake Winnipesaukee, NH",
     date: "April 2025",
     katherineComment: "DJ took this photo. It's a good photo",
     djComment: "Add comment, DJ",
@@ -99,7 +99,7 @@ export const samplePhotos: Photo[] = [
   {
     id: "6",
     src: lobsterPool,
-    location: "Rockport, Massachusetts",
+    location: "Rockport, MA",
     date: "May 2025",
     katherineComment: "A lobby roll pitstop whenever we are near Davey's dad's house in Gloucester, MA",
     djComment: "Add comment, DJ",
@@ -254,7 +254,7 @@ export const samplePhotos: Photo[] = [
   {
     id: "4",
     src: shenandoahFamily,
-    location: "Shenandoah, Virginia",
+    location: "Shenandoah, VA",
     date: "August 2025",
     katherineComment: "Scenic pit stop with 2/3 nieces on our way to \"mine for gold!\"",
     djComment: "Add comment, DJ",
@@ -319,7 +319,7 @@ export const samplePhotos: Photo[] = [
   {
     id: "35",
     src: sushiClassCouple,
-    location: "Boston, Massachusetts",
+    location: "Boston, MA",
     date: "September 2025",
     katherineComment: "2nd wedding anniversary omakase dinner. There was an open question about whether I should be eating sushi and a solo diner next to DJ who wouldn't stop talking to him.",
     djComment: "Add comment, DJ",
