@@ -50,7 +50,7 @@ export const samplePhotos: Photo[] = [
     src: sunsetBeach,
     location: "El Pescadero, Baja California Sur, Mexico",
     date: "January 2025",
-    katherineComment: "This was before I found a woman on the east coat that I trusted to cut my hair",
+    katherineComment: "This was before I found a woman on the east coast that I trusted to cut my hair",
     djComment: "Add comment, DJ",
   },
   // February 2025
