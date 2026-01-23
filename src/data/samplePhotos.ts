@@ -66,7 +66,7 @@ export const samplePhotos: Photo[] = [
   {
     id: "11",
     src: sunsetBeach,
-    location: "Malibu, California",
+    location: "El Pescadero, Baja California Sur, Mexico",
     date: "January 2025",
     katherineComment: "The golden hour was absolutely perfect.",
     djComment: "Best sunset we've ever caught together.",
