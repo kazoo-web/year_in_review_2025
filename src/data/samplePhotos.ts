@@ -110,7 +110,7 @@ export const samplePhotos: Photo[] = [
     id: "4",
     src: shenandoahFamily,
     location: "Shenandoah, Virginia",
-    date: "May 2025",
+    date: "August 2025",
     katherineComment: "Family hike day!",
     djComment: "That view was incredible.",
   },
