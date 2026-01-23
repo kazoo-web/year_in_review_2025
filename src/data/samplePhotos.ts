@@ -49,8 +49,8 @@ export const samplePhotos: Photo[] = [
     src: carterNotchHutGroup,
     location: "Carter Notch Hut, New Hampshire",
     date: "August 2025",
-    katherineComment: "The crew made it to the hut!",
-    djComment: "Heavy packs but worth every step.",
+    katherineComment: "The crew made it to the hut after a long day of hiking! We were exhausted but so happy to finally arrive.",
+    djComment: "Heavy packs but worth every step. The views along the way were absolutely stunning and the hut felt like a paradise.",
   },
   {
     id: "2",
