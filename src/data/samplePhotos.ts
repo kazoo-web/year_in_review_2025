@@ -239,7 +239,7 @@ export const samplePhotos: Photo[] = [
   {
     id: "25",
     src: dockBeerPortrait,
-    location: "Nova Scotia, Canada",
+    location: "Lunenburg, Nova Scotia, Canada",
     date: "July 2025",
     katherineComment: "Cheers to vacation vibes!",
     djComment: "She looks so cozy in that beanie.",
