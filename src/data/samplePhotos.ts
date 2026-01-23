@@ -264,7 +264,7 @@ export const samplePhotos: Photo[] = [
   {
     id: "1",
     src: carterNotchHutGroup,
-    location: "Mount Auburn Cemetery, Cambridge, MA",
+    location: "AMC Carter Notch Hut, Jackson, NH",
     date: "August 2025",
     katherineComment: "The crew made it to the hut after a long day of hiking! We were exhausted but so happy to finally arrive.",
     djComment: "Heavy packs but worth every step. The views along the way were absolutely stunning and the hut felt like a paradise.",
