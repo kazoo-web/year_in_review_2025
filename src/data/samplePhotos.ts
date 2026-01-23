@@ -215,7 +215,7 @@ export const samplePhotos: Photo[] = [
   {
     id: "22",
     src: vanMorningView,
-    location: "Nova Scotia, Canada",
+    location: "Unknown",
     date: "July 2025",
     katherineComment: "Waking up to this view from the van!",
     djComment: "Best bedroom window ever.",
