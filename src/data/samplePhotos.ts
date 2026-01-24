@@ -330,7 +330,7 @@ export const samplePhotos: Photo[] = [
     location: "South Bend, IN",
     date: "September 2025",
     katherineComment: "I tried to wear the colors, etc.",
-    djComment: "How fun is it to bring someone who says \"big stadiums of people yelling makes me think of the Holocaust\" to a treasured young adult temple of memories?!",
+    djComment: "How fun is it to bring someone who says \"big stadiums of people yelling makes me think of the Third Reich\" to a treasured young adult temple of memories?!",
   },
   {
     id: "37",
