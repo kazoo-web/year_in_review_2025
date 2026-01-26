@@ -15,7 +15,7 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter>
+      <BrowserRouter basename="/year-in-review-2025">
         <AppErrorBoundary title="This page failed to load">
           <Routes>
             <Route path="/" element={<Index />} />
