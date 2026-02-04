@@ -7,9 +7,14 @@ import { componentTagger } from "lovable-tagger";
 export default defineConfig(({ mode }) => ({
   base: "/year-in-review-2025/",
   build: {
-    outDir: "dist-yir",
-    emptyOutDir: true,
+  outDir: "dist-yir",
+  emptyOutDir: true,
+  rollupOptions: {
+    output: {
+      manualChunks: undefined,
+    },
   },
+},
   server: {
     host: "::",
     port: 8080,
