@@ -12,6 +12,25 @@ export const PhotoGallery = ({ photos, autoPlayInterval = 6000 }: PhotoGalleryPr
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
 
+  // Preload first few images on mount for faster initial load
+  useEffect(() => {
+    const preloadCount = Math.min(3, photos.length);
+    for (let i = 0; i < preloadCount; i++) {
+      const img = new Image();
+      img.src = photos[i].src;
+    }
+  }, [photos]);
+
+  // Preload upcoming images as user progresses through slideshow
+  useEffect(() => {
+    const preloadAhead = 2; // Preload 2 images ahead
+    for (let i = 1; i <= preloadAhead; i++) {
+      const nextIndex = (currentIndex + i + 1) % photos.length;
+      const img = new Image();
+      img.src = photos[nextIndex].src;
+    }
+  }, [currentIndex, photos]);
+
   useEffect(() => {
     if (!isPlaying) return;
 
