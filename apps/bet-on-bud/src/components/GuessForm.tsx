@@ -305,14 +305,14 @@ export const GuessForm = ({ onNavigate, onSubmit, isSubmitting, submitError }: G
                   value={advice}
                   onChange={(e) => setAdvice(e.target.value)}
                   placeholder="Share your wisdom..."
-                  maxLength={500}
-                  rows={3}
+                  maxLength={1500}
+                  rows={4}
                   className="bob-input pl-11 pt-3 resize-none"
                   style={{ paddingTop: "0.75rem" }}
                 />
               </div>
               <p className="mt-1 text-xs text-right" style={{ color: "var(--bob-text-muted)" }}>
-                {advice.length}/500
+                {advice.length}/1500
               </p>
             </div>
 
