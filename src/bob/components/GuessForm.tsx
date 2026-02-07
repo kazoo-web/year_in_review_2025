@@ -1,11 +1,13 @@
 import { useState } from "react";
-import { User, Mail, DollarSign, ArrowLeft, Baby } from "lucide-react";
+import { User, Mail, DollarSign, ArrowLeft, Baby, MessageSquare, Loader2 } from "lucide-react";
 import { BabyIcon } from "./BabyIcon";
 import { AppView, GuessData } from "../App";
 
 interface GuessFormProps {
   onNavigate: (view: AppView) => void;
   onSubmit: (guess: GuessData) => void;
+  isSubmitting: boolean;
+  submitError: string | null;
 }
 
 // Configuration
@@ -28,12 +30,13 @@ const addDays = (date: Date, days: number): Date => {
   return result;
 };
 
-export const GuessForm = ({ onNavigate, onSubmit }: GuessFormProps) => {
+export const GuessForm = ({ onNavigate, onSubmit, isSubmitting, submitError }: GuessFormProps) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [sex, setSex] = useState<"boy" | "girl" | null>(null);
   const [dateOffset, setDateOffset] = useState(0);
   const [amount, setAmount] = useState(MIN_CONTRIBUTION);
+  const [advice, setAdvice] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const selectedDate = addDays(DUE_DATE, dateOffset);
@@ -76,6 +79,7 @@ export const GuessForm = ({ onNavigate, onSubmit }: GuessFormProps) => {
       sex,
       date: selectedDate,
       contributionAmount: amount,
+      parentingAdvice: advice.trim() || undefined,
     });
   };
 
@@ -273,9 +277,55 @@ export const GuessForm = ({ onNavigate, onSubmit }: GuessFormProps) => {
               )}
             </div>
 
+            {/* Parenting Advice */}
+            <div>
+              <label className="block text-sm font-medium mb-2" style={{ color: "var(--bob-text)" }}>
+                Parenting Advice <span style={{ color: "var(--bob-text-muted)" }}>(optional)</span>
+              </label>
+              <p className="text-sm mb-2" style={{ color: "var(--bob-text-muted)" }}>
+                Your single best piece of parenting advice, from those who have or have been parented
+              </p>
+              <div className="relative">
+                <MessageSquare
+                  className="absolute left-3 top-3 w-5 h-5"
+                  style={{ color: "var(--bob-text-muted)" }}
+                />
+                <textarea
+                  value={advice}
+                  onChange={(e) => setAdvice(e.target.value)}
+                  placeholder="Share your wisdom..."
+                  maxLength={500}
+                  rows={3}
+                  className="bob-input pl-11 pt-3 resize-none"
+                  style={{ paddingTop: "0.75rem" }}
+                />
+              </div>
+              <p className="mt-1 text-xs text-right" style={{ color: "var(--bob-text-muted)" }}>
+                {advice.length}/500
+              </p>
+            </div>
+
+            {/* Submit Error */}
+            {submitError && (
+              <div className="p-4 rounded-lg bg-red-50 border border-red-200">
+                <p className="text-sm text-red-600">{submitError}</p>
+              </div>
+            )}
+
             {/* Submit Button */}
-            <button type="submit" className="bob-btn bob-btn-primary w-full">
-              Complete & Pay
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="bob-btn bob-btn-primary w-full disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                  Submitting...
+                </>
+              ) : (
+                "Complete & Pay"
+              )}
             </button>
           </form>
 
