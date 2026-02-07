@@ -10,15 +10,15 @@ interface GuessFormProps {
   submitError: string | null;
 }
 
-// Configuration
-const DUE_DATE = new Date("2026-05-22");
+// Configuration - use T12:00:00 to avoid timezone issues
+const DUE_DATE = new Date("2026-05-22T12:00:00");
 const MIN_OFFSET = -14; // May 8, 2026
 const MAX_OFFSET = 14; // June 5, 2026
 const MIN_CONTRIBUTION = 10;
 
 // Pre-calculate the min and max dates
-const MIN_DATE = new Date("2026-05-08");
-const MAX_DATE = new Date("2026-06-05");
+const MIN_DATE = new Date("2026-05-08T12:00:00");
+const MAX_DATE = new Date("2026-06-05T12:00:00");
 
 const formatDate = (date: Date): string => {
   return date.toLocaleDateString("en-US", {
@@ -255,11 +255,6 @@ export const GuessForm = ({ onNavigate, onSubmit, isSubmitting, submitError }: G
                 </span>
                 <span>{formatShortDate(MAX_DATE)}</span>
               </div>
-
-              {/* Due date reference */}
-              <p className="text-center text-sm mt-2" style={{ color: "var(--bob-text-muted)" }}>
-                Due date: {formatShortDate(DUE_DATE)} (±14 days)
-              </p>
             </div>
 
             {/* Contribution Amount */}
