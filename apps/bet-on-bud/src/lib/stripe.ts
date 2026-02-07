@@ -1,11 +1,14 @@
 /**
- * Stripe Integration
+ * Stripe Integration using Payment Links
  *
- * For testing: Leave VITE_STRIPE_ENABLED unset or "false" - payments will be skipped
- * For production: Set VITE_STRIPE_ENABLED="true" and configure Stripe
+ * Setup:
+ * 1. Create a Payment Link in Stripe Dashboard with "Customer chooses amount"
+ * 2. Set VITE_STRIPE_PAYMENT_LINK_ID to the Payment Link ID (e.g., "plink_xxx" or just the ID part)
+ * 3. Configure success URL in Stripe to: https://yourdomain.com/bet-on-bud/?payment=success
  */
 
-const STRIPE_ENABLED = import.meta.env.VITE_STRIPE_ENABLED === "true";
+// Payment Link ID from Stripe Dashboard (the ID after buy.stripe.com/)
+const STRIPE_PAYMENT_LINK_ID = import.meta.env.VITE_STRIPE_PAYMENT_LINK_ID || "";
 
 export interface CreateCheckoutParams {
   amount: number; // in dollars
@@ -14,26 +17,30 @@ export interface CreateCheckoutParams {
   guessId: string;
 }
 
-// For now, this is a placeholder that skips payment in test mode
-// When ready for real payments, we'll set up Stripe Checkout
+// Redirect to Stripe Payment Link
 export const redirectToCheckout = async ({
-  amount,
-  guesserName,
   guesserEmail,
   guessId,
 }: CreateCheckoutParams): Promise<{ error?: string }> => {
 
-  if (!STRIPE_ENABLED) {
+  if (!STRIPE_PAYMENT_LINK_ID) {
     // Skip payment for testing - return error to trigger the fallback flow
-    console.log(`[TEST MODE] Would charge $${amount} to ${guesserName} (${guesserEmail}) for guess ${guessId}`);
+    console.log(`[TEST MODE] Stripe Payment Link not configured, skipping payment`);
     return { error: "Stripe not configured - test mode" };
   }
 
-  // TODO: Implement real Stripe checkout when ready
-  // This will require either:
-  // 1. A backend/serverless function to create Checkout Sessions
-  // 2. Stripe Payment Links (fixed amounts only)
+  // Build the Stripe Payment Link URL
+  // Format: https://buy.stripe.com/{id}?prefilled_email=xxx&client_reference_id=xxx
+  const params = new URLSearchParams({
+    prefilled_email: guesserEmail,
+    client_reference_id: guessId, // This will appear in Stripe Dashboard for tracking
+  });
 
-  return { error: "Stripe checkout not yet implemented" };
+  const checkoutUrl = `https://buy.stripe.com/${STRIPE_PAYMENT_LINK_ID}?${params.toString()}`;
+
+  // Redirect to Stripe
+  window.location.href = checkoutUrl;
+
+  return {};
 };
 

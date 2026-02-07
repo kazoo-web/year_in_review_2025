@@ -28,32 +28,40 @@ function App() {
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const payment = urlParams.get("payment");
-    const guessId = urlParams.get("guess_id");
 
-    if (payment === "success" && guessId) {
-      // Payment successful - update status and show confirmation
-      updatePaymentStatus(guessId, "completed").then(() => {
-        getGuessById(guessId).then((guess) => {
-          if (guess) {
-            setSubmittedGuess({
-              name: guess.name,
-              email: guess.email,
-              sex: guess.sex,
-              date: new Date(guess.guess_date + "T12:00:00"),
-              timeOfDay: guess.time_of_day,
-              contributionAmount: guess.contribution_amount,
-              parentingAdvice: guess.parenting_advice || undefined,
-            });
-            setPaymentSuccess(true);
-            setCurrentView("confirmation");
-          }
+    if (payment === "success") {
+      // Get the guessId from localStorage (stored before redirect)
+      const guessId = localStorage.getItem("pendingGuessId");
+
+      if (guessId) {
+        // Payment successful - update status and show confirmation
+        updatePaymentStatus(guessId, "completed").then(() => {
+          getGuessById(guessId).then((guess) => {
+            if (guess) {
+              setSubmittedGuess({
+                name: guess.name,
+                email: guess.email,
+                sex: guess.sex,
+                date: new Date(guess.guess_date + "T12:00:00"),
+                timeOfDay: guess.time_of_day,
+                contributionAmount: guess.contribution_amount,
+                parentingAdvice: guess.parenting_advice || undefined,
+              });
+              setPaymentSuccess(true);
+              setCurrentView("confirmation");
+            }
+          });
         });
-      });
+
+        // Clean up
+        localStorage.removeItem("pendingGuessId");
+      }
 
       // Clean up URL
       window.history.replaceState({}, "", window.location.pathname);
     } else if (payment === "cancelled") {
-      setSubmitError("Payment was cancelled. Your guess was not recorded.");
+      setSubmitError("Payment was cancelled. Please try again.");
+      localStorage.removeItem("pendingGuessId");
       // Clean up URL
       window.history.replaceState({}, "", window.location.pathname);
     }
@@ -72,7 +80,10 @@ function App() {
       return;
     }
 
-    // Then redirect to Stripe Checkout
+    // Store guessId in localStorage for after payment redirect
+    localStorage.setItem("pendingGuessId", result.data.id);
+
+    // Redirect to Stripe Checkout
     const checkoutResult = await redirectToCheckout({
       amount: guess.contributionAmount,
       guesserName: guess.name,
@@ -83,8 +94,10 @@ function App() {
     // If redirect failed (e.g., Stripe not configured), show error
     if (checkoutResult.error) {
       setIsSubmitting(false);
+      localStorage.removeItem("pendingGuessId");
+
       // For testing without Stripe, go directly to confirmation
-      if (checkoutResult.error.includes("not configured") || checkoutResult.error.includes("Failed to connect")) {
+      if (checkoutResult.error.includes("not configured") || checkoutResult.error.includes("test mode")) {
         console.warn("Stripe not configured, skipping payment for testing");
         setSubmittedGuess(guess);
         setCurrentView("confirmation");
