@@ -7,15 +7,15 @@ interface GuessingStatsProps {
 }
 
 const formatShortDate = (dateStr: string): string => {
-  const date = new Date(dateStr + "T00:00:00");
+  const date = new Date(dateStr + "T12:00:00");
   return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
 };
 
 // Generate dates between min and max (inclusive)
 const generateDateRange = (minDate: string, maxDate: string): string[] => {
   const dates: string[] = [];
-  const start = new Date(minDate + "T00:00:00");
-  const end = new Date(maxDate + "T00:00:00");
+  const start = new Date(minDate + "T12:00:00");
+  const end = new Date(maxDate + "T12:00:00");
 
   for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
     dates.push(d.toISOString().split("T")[0]);
@@ -52,32 +52,37 @@ export const GuessingStats = ({ guesses }: GuessingStatsProps) => {
   });
   const maxDateCount = Math.max(...Object.values(dateCounts), 1);
 
-  // Generate Y-axis labels (unique integers only)
+  // Generate Y-axis labels (integers only, from max down to 0)
   const yAxisLabels: number[] = [];
   for (let i = maxDateCount; i >= 0; i--) {
     yAxisLabels.push(i);
   }
 
-  // Calculate donut chart segments
-  const radius = 60;
-  const strokeWidth = 20;
+  // Donut chart calculations
+  const size = 160;
+  const strokeWidth = 24;
+  const radius = (size - strokeWidth) / 2;
+  const center = size / 2;
   const circumference = 2 * Math.PI * radius;
-  const boyArc = (boyPercent / 100) * circumference;
-  const girlArc = (girlPercent / 100) * circumference;
 
-  // Calculate label positions on the donut
-  const getLabelPosition = (percent: number, startPercent: number) => {
-    const midPercent = startPercent + percent / 2;
-    const angle = (midPercent / 100) * 2 * Math.PI - Math.PI / 2; // Start from top
-    const labelRadius = radius + strokeWidth / 2 + 15;
+  // Calculate arc paths for donut segments
+  const polarToCartesian = (angle: number) => {
+    const rad = ((angle - 90) * Math.PI) / 180;
     return {
-      x: 80 + Math.cos(angle) * labelRadius,
-      y: 80 + Math.sin(angle) * labelRadius,
+      x: center + radius * Math.cos(rad),
+      y: center + radius * Math.sin(rad),
     };
   };
 
-  const boyLabelPos = boyPercent > 0 ? getLabelPosition(boyPercent, 0) : null;
-  const girlLabelPos = girlPercent > 0 ? getLabelPosition(girlPercent, boyPercent) : null;
+  const describeArc = (startAngle: number, endAngle: number) => {
+    const start = polarToCartesian(endAngle);
+    const end = polarToCartesian(startAngle);
+    const largeArcFlag = endAngle - startAngle <= 180 ? "0" : "1";
+    return `M ${start.x} ${start.y} A ${radius} ${radius} 0 ${largeArcFlag} 0 ${end.x} ${end.y}`;
+  };
+
+  const boyAngle = (boyPercent / 100) * 360;
+  const girlAngle = (girlPercent / 100) * 360;
 
   return (
     <div className="space-y-4">
@@ -99,37 +104,29 @@ export const GuessingStats = ({ guesses }: GuessingStatsProps) => {
 
         <div className="flex flex-col md:flex-row items-center gap-6">
           {/* Donut Chart */}
-          <div className="relative">
-            <svg width="180" height="180" viewBox="0 0 180 180">
-              {/* Boy segment (blue) - starts from top */}
+          <div className="relative flex-shrink-0">
+            <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
+              {/* Boy segment (blue) - starts from top (0°) */}
               {boyPercent > 0 && (
-                <circle
-                  cx="90"
-                  cy="90"
-                  r={radius}
+                <path
+                  d={describeArc(0, boyAngle)}
                   fill="none"
                   stroke={hoveredSegment === "boy" ? "#60a5fa" : "#93c5fd"}
                   strokeWidth={strokeWidth}
-                  strokeDasharray={`${boyArc} ${circumference}`}
-                  strokeDashoffset={circumference / 4}
-                  strokeLinecap="butt"
+                  strokeLinecap="round"
                   style={{ cursor: "pointer", transition: "stroke 0.2s" }}
                   onMouseEnter={() => setHoveredSegment("boy")}
                   onMouseLeave={() => setHoveredSegment(null)}
                 />
               )}
-              {/* Girl segment (coral) - starts after boy */}
+              {/* Girl segment (coral) - starts where boy ends */}
               {girlPercent > 0 && (
-                <circle
-                  cx="90"
-                  cy="90"
-                  r={radius}
+                <path
+                  d={describeArc(boyAngle, boyAngle + girlAngle)}
                   fill="none"
                   stroke={hoveredSegment === "girl" ? "#d4694a" : "#e8805c"}
                   strokeWidth={strokeWidth}
-                  strokeDasharray={`${girlArc} ${circumference}`}
-                  strokeDashoffset={circumference / 4 - boyArc}
-                  strokeLinecap="butt"
+                  strokeLinecap="round"
                   style={{ cursor: "pointer", transition: "stroke 0.2s" }}
                   onMouseEnter={() => setHoveredSegment("girl")}
                   onMouseLeave={() => setHoveredSegment(null)}
@@ -137,53 +134,52 @@ export const GuessingStats = ({ guesses }: GuessingStatsProps) => {
               )}
             </svg>
 
-            {/* Boy percentage label */}
-            {boyPercent > 0 && boyLabelPos && (
+            {/* Center labels */}
+            <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+              {hoveredSegment ? (
+                <div className="text-center">
+                  <div className="text-2xl font-bold" style={{ color: hoveredSegment === "boy" ? "#3b82f6" : "#e8805c" }}>
+                    {hoveredSegment === "boy" ? boyPercent : girlPercent}%
+                  </div>
+                  <div className="text-sm capitalize" style={{ color: "var(--bob-text-muted)" }}>
+                    {hoveredSegment === "boy" ? boyCount : girlCount} {(hoveredSegment === "boy" ? boyCount : girlCount) === 1 ? "vote" : "votes"}
+                  </div>
+                </div>
+              ) : (
+                <div className="text-center">
+                  <div className="text-lg font-medium" style={{ color: "var(--bob-text)" }}>{total}</div>
+                  <div className="text-xs" style={{ color: "var(--bob-text-muted)" }}>total</div>
+                </div>
+              )}
+            </div>
+
+            {/* External percentage labels */}
+            {boyPercent > 0 && (
               <div
-                className="absolute text-sm font-bold pointer-events-none"
+                className="absolute text-sm font-bold"
                 style={{
-                  left: boyLabelPos.x + 10,
-                  top: boyLabelPos.y + 10,
-                  transform: "translate(-50%, -50%)",
                   color: "#3b82f6",
+                  top: boyAngle <= 180 ? "0" : "auto",
+                  bottom: boyAngle > 180 ? "0" : "auto",
+                  right: boyAngle <= 90 || boyAngle > 270 ? "0" : "auto",
+                  left: boyAngle > 90 && boyAngle <= 270 ? "0" : "auto",
+                  transform: "translate(25%, -25%)",
                 }}
               >
                 {boyPercent}%
               </div>
             )}
-            {/* Girl percentage label */}
-            {girlPercent > 0 && girlLabelPos && (
+            {girlPercent > 0 && (
               <div
-                className="absolute text-sm font-bold pointer-events-none"
+                className="absolute text-sm font-bold"
                 style={{
-                  left: girlLabelPos.x + 10,
-                  top: girlLabelPos.y + 10,
-                  transform: "translate(-50%, -50%)",
                   color: "#e8805c",
+                  bottom: "0",
+                  left: "50%",
+                  transform: "translate(-50%, 25%)",
                 }}
               >
                 {girlPercent}%
-              </div>
-            )}
-
-            {/* Hover tooltip */}
-            {hoveredSegment && (
-              <div
-                className="absolute bg-white shadow-lg rounded-lg px-3 py-2 text-sm pointer-events-none z-10"
-                style={{
-                  left: "50%",
-                  top: "50%",
-                  transform: "translate(-50%, -50%)",
-                  border: "1px solid var(--bob-border)",
-                }}
-              >
-                <div className="font-medium capitalize">{hoveredSegment}</div>
-                <div style={{ color: "var(--bob-text-muted)" }}>
-                  {hoveredSegment === "boy" ? boyCount : girlCount} vote{(hoveredSegment === "boy" ? boyCount : girlCount) !== 1 ? "s" : ""}
-                </div>
-                <div className="font-bold" style={{ color: hoveredSegment === "boy" ? "#3b82f6" : "#e8805c" }}>
-                  {hoveredSegment === "boy" ? boyPercent : girlPercent}%
-                </div>
               </div>
             )}
           </div>
@@ -199,28 +195,14 @@ export const GuessingStats = ({ guesses }: GuessingStatsProps) => {
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <Baby
-                    className="w-5 h-5"
-                    style={{ color: "var(--bob-boy-blue-text)" }}
-                  />
-                  <span
-                    className="font-medium"
-                    style={{ color: "var(--bob-boy-blue-text)" }}
-                  >
-                    Boy
-                  </span>
+                  <Baby className="w-5 h-5" style={{ color: "var(--bob-boy-blue-text)" }} />
+                  <span className="font-medium" style={{ color: "var(--bob-boy-blue-text)" }}>Boy</span>
                 </div>
-                <span
-                  className="text-2xl font-bold"
-                  style={{ color: "var(--bob-boy-blue-text)" }}
-                >
+                <span className="text-2xl font-bold" style={{ color: "var(--bob-boy-blue-text)" }}>
                   {boyPercent}%
                 </span>
               </div>
-              <p
-                className="text-sm mt-1"
-                style={{ color: "var(--bob-boy-blue-text)", opacity: 0.8 }}
-              >
+              <p className="text-sm mt-1" style={{ color: "var(--bob-boy-blue-text)", opacity: 0.8 }}>
                 {boyCount} {boyCount === 1 ? "vote" : "votes"}
               </p>
             </div>
@@ -234,28 +216,14 @@ export const GuessingStats = ({ guesses }: GuessingStatsProps) => {
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <Baby
-                    className="w-5 h-5"
-                    style={{ color: "var(--bob-girl-coral-text)" }}
-                  />
-                  <span
-                    className="font-medium"
-                    style={{ color: "var(--bob-girl-coral-text)" }}
-                  >
-                    Girl
-                  </span>
+                  <Baby className="w-5 h-5" style={{ color: "var(--bob-girl-coral-text)" }} />
+                  <span className="font-medium" style={{ color: "var(--bob-girl-coral-text)" }}>Girl</span>
                 </div>
-                <span
-                  className="text-2xl font-bold"
-                  style={{ color: "var(--bob-girl-coral-text)" }}
-                >
+                <span className="text-2xl font-bold" style={{ color: "var(--bob-girl-coral-text)" }}>
                   {girlPercent}%
                 </span>
               </div>
-              <p
-                className="text-sm mt-1"
-                style={{ color: "var(--bob-girl-coral-text)", opacity: 0.8 }}
-              >
+              <p className="text-sm mt-1" style={{ color: "var(--bob-girl-coral-text)", opacity: 0.8 }}>
                 {girlCount} {girlCount === 1 ? "vote" : "votes"}
               </p>
             </div>
@@ -264,7 +232,7 @@ export const GuessingStats = ({ guesses }: GuessingStatsProps) => {
       </div>
 
       {/* Date Distribution Card */}
-      <div className="bob-card p-6">
+      <div className="bob-card p-6 overflow-visible">
         <div className="flex items-center gap-2 mb-6">
           <Calendar className="w-5 h-5" style={{ color: "var(--bob-coral)" }} />
           <span className="font-medium" style={{ color: "var(--bob-text)" }}>
@@ -273,49 +241,59 @@ export const GuessingStats = ({ guesses }: GuessingStatsProps) => {
         </div>
 
         {/* Bar Chart */}
-        <div className="overflow-x-auto">
-          <div style={{ minWidth: Math.max(displayDates.length * 40, 300) }}>
+        <div className="overflow-visible">
+          <div style={{ minWidth: Math.max(displayDates.length * 35, 200) }}>
             {/* Y-axis labels and bars */}
             <div className="flex">
               {/* Y-axis */}
               <div
-                className="flex flex-col justify-between text-xs pr-2"
-                style={{ color: "var(--bob-text-muted)", height: "120px" }}
+                className="flex flex-col justify-between text-xs pr-3 text-right"
+                style={{ color: "var(--bob-text-muted)", height: "120px", minWidth: "20px" }}
               >
                 {yAxisLabels.map((label, i) => (
                   <span key={i}>{label}</span>
                 ))}
               </div>
 
-              {/* Bars */}
+              {/* Bars container */}
               <div
-                className="flex-1 flex items-end gap-2 border-b border-l relative"
+                className="flex-1 flex items-end gap-1 border-b border-l relative"
                 style={{ borderColor: "var(--bob-border)", height: "120px" }}
               >
                 {displayDates.map((date) => {
                   const count = dateCounts[date];
-                  const height = count > 0 ? (count / maxDateCount) * 100 : 0;
+                  // Calculate exact height based on count relative to max
+                  const heightPercent = (count / maxDateCount) * 100;
                   const isHovered = hoveredDate === date;
+
                   return (
                     <div
                       key={date}
                       className="flex-1 flex flex-col items-center justify-end relative"
+                      style={{ maxWidth: "40px" }}
                       onMouseEnter={() => setHoveredDate(date)}
                       onMouseLeave={() => setHoveredDate(null)}
                     >
-                      <div
-                        className="w-full max-w-[24px] rounded-t cursor-pointer transition-all"
-                        style={{
-                          height: `${Math.max(height, count > 0 ? 8 : 0)}%`,
-                          backgroundColor: count > 0 ? (isHovered ? "#d4694a" : "#e8805c") : "#e5e7eb",
-                          minHeight: count > 0 ? "8px" : "4px",
-                        }}
-                      />
+                      {/* Only show bar if count > 0 */}
+                      {count > 0 && (
+                        <div
+                          className="w-full rounded-t cursor-pointer transition-all"
+                          style={{
+                            height: `${heightPercent}%`,
+                            backgroundColor: isHovered ? "#d4694a" : "#e8805c",
+                            minHeight: "4px",
+                          }}
+                        />
+                      )}
                       {/* Tooltip */}
                       {isHovered && (
                         <div
-                          className="absolute bottom-full mb-2 bg-white shadow-lg rounded-lg px-3 py-2 text-sm z-10 whitespace-nowrap"
-                          style={{ border: "1px solid var(--bob-border)" }}
+                          className="absolute bottom-full mb-2 bg-white shadow-lg rounded-lg px-3 py-2 text-sm z-50 whitespace-nowrap"
+                          style={{
+                            border: "1px solid var(--bob-border)",
+                            left: "50%",
+                            transform: "translateX(-50%)",
+                          }}
                         >
                           <div className="font-medium">{formatShortDate(date)}</div>
                           <div style={{ color: "var(--bob-text-muted)" }}>
@@ -330,16 +308,16 @@ export const GuessingStats = ({ guesses }: GuessingStatsProps) => {
             </div>
 
             {/* X-axis labels */}
-            <div className="flex mt-2 ml-6">
+            <div className="flex mt-2" style={{ marginLeft: "28px" }}>
               {displayDates.map((date, i) => {
-                // Show first, last, and every few in between
+                // Show first, last, and some in between
                 const showLabel = i === 0 || i === displayDates.length - 1 ||
-                  (displayDates.length > 5 && i % Math.ceil(displayDates.length / 5) === 0);
+                  (displayDates.length > 3 && i === Math.floor(displayDates.length / 2));
                 return (
                   <div
                     key={date}
                     className="flex-1 text-center"
-                    style={{ color: "var(--bob-text-muted)" }}
+                    style={{ color: "var(--bob-text-muted)", maxWidth: "40px" }}
                   >
                     {showLabel && (
                       <span className="text-xs">{formatShortDate(date)}</span>
@@ -365,10 +343,7 @@ export const GuessingStats = ({ guesses }: GuessingStatsProps) => {
             </div>
             <span style={{ color: "var(--bob-text-muted)" }}>Betters</span>
           </div>
-          <p
-            className="text-4xl font-bold"
-            style={{ color: "var(--bob-text)" }}
-          >
+          <p className="text-4xl font-bold" style={{ color: "var(--bob-text)" }}>
             {total}
           </p>
         </div>
@@ -384,10 +359,7 @@ export const GuessingStats = ({ guesses }: GuessingStatsProps) => {
             </div>
             <span style={{ color: "var(--bob-text-muted)" }}>Baby Fund</span>
           </div>
-          <p
-            className="text-4xl font-bold"
-            style={{ color: "var(--bob-text)" }}
-          >
+          <p className="text-4xl font-bold" style={{ color: "var(--bob-text)" }}>
             ${totalFund}
           </p>
           <p className="text-sm mt-1" style={{ color: "var(--bob-text-muted)" }}>
