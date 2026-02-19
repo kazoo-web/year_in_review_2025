@@ -121,7 +121,7 @@ export const ConfirmationPage = ({ guess, onNavigate, paymentSuccess }: Confirma
 
           {/* Thank you message */}
           <p className="mt-6 text-sm text-center" style={{ color: "var(--bob-text-muted)" }}>
-            We appreciate your support! Your guess has been recorded on our end and you'll receive an email receipt shortly. If you want to remember it for your own records, mark it down now!
+            We appreciate your support! Your guess has been recorded on our end and you'll receive an email receipt shortly. If you want to remember it for your own records, mark it down now! Bookmark <a href="https://www.didullman.com/bet-on-bud-results" style={{ color: "var(--bob-coral)", textDecoration: "underline" }}>www.didullman.com/bet-on-bud-results</a> to monitor the results in the future.
           </p>
 
           {/* Stats Section */}
